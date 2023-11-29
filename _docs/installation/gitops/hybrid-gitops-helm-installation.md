@@ -21,9 +21,9 @@ There are two options for Hybrid GitOps Runtime installation via Helm, each cate
   The _clean cluster_ installation option is suitable for environments where you want to deploy the GitOps Runtime on a cluster without Argo CD.
   The installation cluster should be free of Argo Project components. GitOps Runtime installation on a clean cluster also installs Argo Project components as part of the installation process, 
 
-* **Cluster with existing Argo CD**  
-  If you have a cluster with Argo CD already installed, you can extend it with Codefresh's GitOps capabilities.
-  This installation option for the GitOps Runtime requires additional configuration to prevent naming and tracking conflicts across resources both to the Community Argo CD instance and to the Argo CD instance deployed by Codefresh.
+* **Cluster with existing Community Argo CD**  
+  If you have a cluster with Community Argo CD already installed, you can extend it with Codefresh's GitOps capabilities.
+  This installation option for the GitOps Runtime requires additional configuration to prevent naming and tracking conflicts across resources in the Community Argo CD and the Argo CD deployed by Codefresh (see [How does the Codefresh GitOps Runtime coexist with Community ArgoCD?]({{site.baseurl}}/docs/installation/gitops/argo-with-gitops-side-by-side/#how-does-the-codefresh-gitops-runtime-coexist-with-community-argocd)).
 
 Choose the installation option that best aligns with your specific requirements and current environment setup. 
 
@@ -56,7 +56,7 @@ In the documentation, Hybrid GitOps Runtimes are also referred to as GitOps Runt
 ## Preparing for Hybrid GitOps Runtime installation
 
 
-Whether you are installing the GitOps Runtime on a cluster with or without Community Argo CD, you have to complete the prerequisites to ensure a smooth installation.
+Whether you are installing the GitOps Runtime on a cluster with or without Community Argo CD, you _must_ complete the prerequisites to ensure a smooth installation. 
 
 
 | Prerequisite                                                            |  GitOps Runtime only    | GitOps Runtime with Community Argo CD | 
@@ -66,7 +66,7 @@ Whether you are installing the GitOps Runtime on a cluster with or without Commu
 |[Argo Project CRDs(Custom Resource Definitions)](#gitops-runtime-onlygitops-runtime-with-argo-cd-argo-project-crds)  |     ✅            | ✅                  |
 |[Argo Rollout CRDs(Custom Resource Definitions)](#gitops-runtime-onlygitops-runtime-with-argo-cd-argo-rollout-crds)  |     ✅            | ✅                  |
 |[Align Argo CD chart's minor versions](#gitops-runtime-with-argo-cd-align-argo-cd-charts-minor-versions) |     N/A           | ✅        |
-|[Set Community Argo CD resource tracking to `label](#gitops-with-argo-cd-set-community-argo-cd-resource-tracking-to-label) |     N/A   |        ✅     |
+|[Set Community Argo CD resource tracking to `label`](#gitops-with-argo-cd-set-community-argo-cd-resource-tracking-to-label) |     N/A   |        ✅     |
 
 ### GitOps Runtime only: Argo Project components
 When installing only the GitOps Runtime on the cluster, the cluster should not have any Argo Project components: Argo Rollouts, Argo CD, Argo Events, and Argo Workflows.
@@ -106,10 +106,6 @@ You can also adopt only those CRDs that apply to Argo Rollouts. Adopting Argo Ro
 
 See [Argo's readme on Helm charts](https://github.com/argoproj/argo-helm/blob/main/README.md){:target="\_blank"}.
 
-
-### GitOps only/GitOps with Argo CD: Argo Rollout CRDs
-
-You can also adopt only those CRDs that apply to Argo Rollouts. Adopting Argo Rollouts CRDs also switches ownership of the Rollout CRDs to the GitOps Runtime, and ensures that there is only one active Argo Rollouts controller active on the Runtime cluster.
 
 >**NOTE**:
 If you already adopted all Argo Project CRDs, you can skip this part.

@@ -5,7 +5,9 @@ group: installation
 toc: true
 ---
 
-If you have a cluster with Argo CD already installed, Codefresh provides an option to install the GitOps Runtime to co-exist with your Argo CD installation.  Extend your environment with Codefresh's GitOps capabilities with a few simple configuration changes, and without the need to uninstall Argo CD. 
+If you have a cluster with Community Argo CD already installed on it, Codefresh provides an option to install the GitOps Runtime alongside your Community Argo CD installation.  
+
+With a few simple configuration changes and without uninstalling Community Argo CD, you can extend your environment with Codefresh's GitOps capabilities. See [How does the Codefresh GitOps Runtime coexist with Community ArgoCD?](#how-does-the-codefresh-gitops-runtime-coexist-with-community-argocd).
 
 * **Enhance CI/CD with Codefresh GitOps**  
   Dive into the world of Codefresh GitOps, exploring its capabilities and features without having to uninstall or reconfigure existing Argo CD installations. Read about our GitOps offering in [Codefresh for GitOps]({{site.baseurl}}/docs/getting-started/gitops-codefresh/).
@@ -18,15 +20,28 @@ If you have a cluster with Argo CD already installed, Codefresh provides an opti
 
 <br>
 
-Follow these steps to install the GitOps Runtime on a cluster with Argo CD:
-* Prepare the Argo CD cluster for GitOps Runtime installation
+Follow these steps to install the GitOps Runtime on the same cluster with Community Argo CD:
+* Prepare the cluster with Community Argo CD for GitOps Runtime installation
 * Install the GitOps Runtime via Helm
 * Migrate Argo CD Applications to GitOps Runtime
 
 
-## Prepare Argo CD cluster for GitOps Runtime installation
+## How does the Codefresh GitOps Runtime coexist with Community ArgoCD?
 
-There are three configuration changes to make _before_ installing the GitOps Runtime on the cluster with Argo CD:
+Argo CD is a component of the Codefresh GitOps Runtime, as described in [GitOps Runtime architecture]({{site.baseurl}}/docs/installation/runtime-architecture/#gitops-runtime-architecture). 
+
+For the GitOps Runtime to coexist on a cluster that already has a Community ArgoCD installation, you need to set different [resource tracking methods](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/) for both installations. Ensuring resource tracking does not overlap between the two Argo CD installations is the main consideration in a side-by-side installation. 
+
+As the GitOps Runtime Argo CD installation uses an [annotation tracking method](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/#additional-tracking-methods-via-an-annotation), the Community Argo CD installation must use a different method for resource tracking. 
+We tested and recommend the [label method](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/#tracking-kubernetes-resources-by-label) for tracking Community Argo CD resources. 
+Argo CD also supports [additional tracking methods](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/#additional-tracking-methods-via-an-annotation), you may want to check out. 
+
+GitOps Runtime install alongside Community Argo CD on the same cluster has additional considerations such as CRD ownership, the Argo Rollouts controller, and version alignment, as listed in the section below.
+
+
+## Prepare cluster with Community Argo CD for GitOps Runtime installation
+
+There are three configuration changes to make to the Community Argo CD installation _before_ installing the GitOps Runtime on the cluster:
 
 1. [Switch ownership of Argo project CRDs]({{site.baseurl}}/docs/installation/gitops/hybrid-gitops-helm-installation/#gitops-runtime-onlygitops-runtime-with-argo-cd-argo-project-crds)
 2. [Align Argo CD chart's minor versions]({{site.baseurl}}/docs/installation/gitops/hybrid-gitops-helm-installation/#gitops-runtime-with-argo-cd-synchronize-argo-cd-charts-minor-versions)
